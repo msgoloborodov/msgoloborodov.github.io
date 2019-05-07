@@ -8,6 +8,15 @@
   // время игры в секундах
   const TIMEOUT = 60;
 
+  const locale = {
+    PlayAgain: 'Играть еще',
+    TryAgain: 'Попробовать еще',
+    Win: 'Победа!',
+    Lose: 'Проиграл',
+    WinSpeach: 'Красавчик',
+    LoseSpeach: 'Попробуй еще раз'
+  };
+
   /**
    * Класс карточки
    */
@@ -129,6 +138,7 @@
     container = null;
     timer = null;
     popup = null;
+    utters = [];
 
     constructor(container, emojies, timeout) {
       this.container = container;
@@ -152,12 +162,23 @@
 
     showPopup(win = false) {
       this.popup.querySelector('.popup__text').innerHTML = this._getPopupText(win);
-      this.popup.querySelector('.popup__button').textContent = win ? 'Play again' : 'Try again';
+      this.popup.querySelector('.popup__button').textContent = win ? locale.PlayAgain : locale.TryAgain;
       this.popup.style.display = 'block';
+      this._speakText(win ? locale.WinSpeach : locale.LoseSpeach);
+    }
+
+    _speakText(text) {
+      if (!speechSynthesis) return;
+
+      const utter = this.utters[text] || new SpeechSynthesisUtterance(text);
+      utter.rate = 1;
+      if (!this.utters[text]) this.utters[text] = utter;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utter);
     }
 
     _getPopupText(win) {
-      let text = win ? 'Win' : 'Lose';
+      let text = win ? locale.Win : locale.Lose;
       return text.split('').map(char => `<span>${char}</span>`).join('');
     }
 
@@ -176,6 +197,7 @@
 
       card.turn();
       this._turnFailedCards();
+      this._speakText(card.emoji);
 
       // Если уже открыта карточка
       if (this.lastTurnedCard) {
