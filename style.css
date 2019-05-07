@@ -2,6 +2,7 @@ body {
     margin: 40px;
     background: #cfd0cf;
     color: #434344;
+    user-select: none;
 }
 
 header {
@@ -26,7 +27,6 @@ header {
     margin-bottom: 25px;
     cursor: pointer;
     transition: transform 0.5s;
-    user-select: none;
 }
 
 .front {
@@ -107,7 +107,6 @@ header {
 }
 
 .popup__text {
-    user-select: none;
     font: 600 48px/48px Arial, sans-serif;
 }
 
@@ -164,7 +163,6 @@ header {
 }
 
 .popup__button {
-    user-select: none;
     cursor: pointer;
     outline: none;
     height: 40px;
